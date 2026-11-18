@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2563eb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Study Buddy">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>My Language Study</title>
+<style>
+:root{--blue:#2563eb;--navy:#172554;--green:#16a34a;--purple:#7c3aed;--bg:#f3f6ff;--card:#fff;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;padding:env(safe-area-inset-top) 14px calc(22px + env(safe-area-inset-bottom))}
+header{background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:white;padding:24px 20px;border-radius:0 0 24px 24px;margin:0 -14px 16px}
+h1{font-size:25px;margin:0 0 6px}header p{margin:0;opacity:.9;font-size:14px}
+.pills{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.pill{background:#ffffff24;border:1px solid #ffffff55;padding:7px 10px;border-radius:20px;font-size:12px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 4px 16px #1e3a8a0d}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.muted{color:var(--muted);font-size:13px}
+.progress{height:9px;background:#e2e8f0;border-radius:20px;overflow:hidden;margin-top:10px}.bar{height:100%;background:linear-gradient(90deg,#16a34a,#22c55e);width:0;transition:width .2s}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}.day{border:0;border-radius:11px;padding:10px 2px;background:#eef2ff;color:#334155;font-weight:700}.day.active{background:var(--blue);color:white}
+.lesson{display:flex;align-items:center;gap:11px;border:1px solid #e8edf5;border-radius:14px;padding:12px;margin-top:9px}
+.lesson input{width:22px;height:22px;accent-color:var(--green);flex-shrink:0}.lesson-main{flex:1}.time{font-size:12px;color:var(--muted);margin-bottom:3px}.lesson-title{font-weight:650}.tag{font-size:11px;padding:4px 8px;border-radius:20px;display:inline-block;margin-top:5px;background:#f1f5f9}.tag.English{background:#dcfce7;color:#166534}.tag.Mandarin{background:#dbeafe;color:#1d4ed8}.tag.Break{background:#f1f5f9;color:#475569}
+button{font:inherit;cursor:pointer}.secondary{border:1px solid #cbd5e1;background:white;color:#334155;border-radius:11px;padding:10px 12px;font-weight:600}
+.topics{width:100%;border-collapse:collapse;font-size:13px}.topics th,.topics td{text-align:left;padding:9px 5px;border-bottom:1px solid #edf0f5}.topics th{color:#475569}
+.tip{background:#fff7ed;border-radius:14px;padding:13px;color:#9a3412;font-size:13px;line-height:1.5}
+footer{text-align:center;color:#64748b;font-size:12px;padding:15px}
+</style>
+</head>
+<body>
+<header>
+<h1>🌍 My Language Study</h1>
+<p>Small steps every day. Speak with confidence!</p>
+<div class="pills"><span class="pill">🇬🇧 English · Intermediate</span><span class="pill">🇨🇳 Mandarin · Beginner</span></div>
+</header>
+<section class="card">
+<div class="row"><strong>Weekly progress</strong><strong id="count">0 / 0</strong></div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<p class="muted" id="progressText">Check off lessons as you complete them.</p>
+</section>
+<section class="card">
+<div class="row"><strong>Choose your day</strong><span class="muted">Weekly timetable</span></div>
+<div class="days" id="days"></div>
+<div class="row" style="margin-top:18px"><strong id="dayTitle">Monday</strong><span class="muted" id="dayCount"></span></div>
+<div id="lessons"></div>
+<div style="margin-top:12px"><button class="secondary" id="reset">Reset this day</button></div>
+</section>
+<section class="card">
+<strong>📚 Weekly speaking topics</strong>
+<table class="topics">
+<thead><tr><th>Day</th><th>English</th><th>Mandarin</th></tr></thead>
+<tbody>
+<tr><td>Mon</td><td>Introduction</td><td>Greetings</td></tr>
+<tr><td>Tue</td><td>Daily conversation</td><td>Introduce yourself</td></tr>
+<tr><td>Wed</td><td>Work & business</td><td>Numbers & time</td></tr>
+<tr><td>Thu</td><td>Listening</td><td>Food & drinks</td></tr>
+<tr><td>Fri</td><td>Free conversation</td><td>Weekly review</td></tr>
+<tr><td>Sat</td><td>Speaking practice</td><td>Speaking practice</td></tr>
+<tr><td>Sun</td><td>Listening & speaking</td><td>Listening & speaking</td></tr>
+</tbody></table>
+</section>
+<section class="card">
+<strong>🎯 Your weekly goals</strong>
+<p>🇬🇧 Speak English for 2 minutes about your day.</p>
+<p>🇨🇳 Learn 5–10 useful Mandarin words each day.</p>
+<p>☕ Take breaks and enjoy your free time.</p>
+<div class="tip">💡 Tip: Say new phrases out loud. Speaking practice matters more than memorizing silently.</div>
+</section>
+<footer>Your progress is saved on this device. Keep going! 💪</footer>
+<script>
+const names=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const weekday=[
+["8:00–8:10 PM","Relax and prepare","Break"],
+["8:10–8:40 PM","English speaking","English"],
+["8:40–8:50 PM","Take a break","Break"],
+["8:50–9:20 PM","Mandarin speaking","Mandarin"],
+["9:20–9:30 PM","Review","Review"]
+];
+const saturday=[
+["12:00–1:00 PM","Lunch and rest","Break"],
+["1:00–2:00 PM","English practice","English"],
+["2:00–2:30 PM","Break","Break"],
+["2:30–3:30 PM","Mandarin practice","Mandarin"],
+["3:30 PM onward","Free time","Break"]
+];
+const sunday=[
+["9:00–10:00 AM","English speaking","English"],
+["10:00–11:00 AM","Break","Break"],
+["11:00 AM–12:00 PM","Mandarin speaking","Mandarin"],
+["12:00–2:00 PM","Lunch and rest","Break"],
+["2:00–2:30 PM","English listening","English"],
+["2:30–3:00 PM","Break","Break"],
+["3:00–3:30 PM","Mandarin listening","Mandarin"],
+["3:30 PM onward","Free time","Break"]
+];
+let selected=0;let done=JSON.parse(localStorage.getItem("studyDone")||"{}");
+const scheduleFor=i=>i===5?saturday:i===6?sunday:weekday;
+const key=(i,j)=>i+"-"+j;
+function render(){
+ document.getElementById("days").innerHTML=names.map((n,i)=>`<button class="day ${i===selected?"active":""}" data-day="${i}">${n.slice(0,3)}</button>`).join("");
+ document.querySelectorAll("[data-day]").forEach(b=>b.onclick=()=>{selected=+b.dataset.day;render()});
+ const list=scheduleFor(selected);let checked=list.filter((_,j)=>done[key(selected,j)]).length;
+ document.getElementById("dayTitle").textContent=names[selected];
+ document.getElementById("dayCount").textContent=checked+" / "+list.length+" done";
+ document.getElementById("lessons").innerHTML=list.map((l,j)=>`<label class="lesson"><div class="lesson-main"><div class="time">${l[0]}</div><div class="lesson-title">${l[1]}</div><span class="tag ${l[2]}">${l[2]}</span></div><input type="checkbox" data-lesson="${j}" ${done[key(selected,j)]?"checked":""} aria-label="Mark ${l[1]} complete"></label>`).join("");
+ document.querySelectorAll("[data-lesson]").forEach(c=>c.onchange=()=>{let k=key(selected,+c.dataset.lesson);if(c.checked)done[k]=true;else delete done[k];localStorage.setItem("studyDone",JSON.stringify(done));render()});
+ document.getElementById("reset").onclick=()=>{list.forEach((_,j)=>delete done[key(selected,j)]);localStorage.setItem("studyDone",JSON.stringify(done));render()};
+ let total=weekday.length*5+saturday.length+sunday.length;
+ let all=Object.keys(done).length;
+ document.getElementById("count").textContent=all+" / "+total;
+ document.getElementById("bar").style.width=(all/total*100)+"%";
+ document.getElementById("progressText").textContent=Math.round(all/total*100)+"% completed. Every small step counts!";
+}
+render();
+if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));}
+</script>
+</body></html>
